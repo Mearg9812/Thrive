@@ -1,6 +1,6 @@
-import { Analytics } from '@vercel/analytics/next'
-import type { Metadata, Viewport } from 'next'
-import './globals.css'
+import { Analytics } from "@vercel/analytics/next";
+import type { Metadata, Viewport } from "next";
+import "./globals.css";
 
 // 1. Site SEO & Favicon Metadata
 export const metadata: Metadata = {
@@ -17,16 +17,10 @@ export const metadata: Metadata = {
     "Bodybuilding",
     "Thrive Health",
   ],
-  icons: {
-    icon: "/icon.svg",
-    shortcut: "/icon.svg",
-    apple: "/icon.svg",
-  },
+  // Next.js automatically detects app/icon.svg so we removed the manual icons block!
 };
 
-
-
-// 2. Mobile Browser Header Color (Changes color dynamically in Light/Dark mode)
+// 2. Mobile Browser Header Color
 export const viewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#f4f8fb" },
@@ -37,14 +31,14 @@ export const viewport: Viewport = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="en" className="bg-background" suppressHydrationWarning>
       <body className="antialiased">
         {children}
-        {process.env.NODE_ENV === 'production' && <Analytics />}
+        {process.env.NODE_ENV === "production" && <Analytics />}
       </body>
     </html>
-  )
+  );
 }

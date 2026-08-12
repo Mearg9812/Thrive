@@ -23,10 +23,16 @@ import {
   TrendingUp,
   Utensils,
   X,
+  User,
+  Users,
+  Droplets,
+  Snowflake,
+  Car,
+  Calendar,
 } from "lucide-react";
 
 const directionsUrl =
-  "https://www.google.com/maps/search/?api=1&query=Bole+Road+Addis+Ababa+Thrive+Health+Fitness";
+  "https://maps.google.com/maps?q=9.010377,38.877495&ll=9.010377,38.877495&z=16";
 
 const translations = {
   en: {
@@ -622,8 +628,8 @@ const getContactActions = (language: keyof typeof translations) => [
       language === "am"
         ? "ስለ ግቦችዎ ከአሰልጣኝ ጋር ይወያዩ"
         : "Talk to a coach about your goals",
-    value: "+251 911 000 000",
-    href: "tel:+251911000000",
+    value: "+251 97 0084408",
+    href: "tel:+251970084408",
     icon: Phone,
   },
   {
@@ -632,8 +638,8 @@ const getContactActions = (language: keyof typeof translations) => [
       language === "am"
         ? "በአንድ የስራ ቀን ውስጥ ምላሽ ያግኙ"
         : "Get a reply within one business day",
-    value: "hello@thrivefit.co",
-    href: "mailto:hello@thrivefit.co",
+    value: "Email Us",
+    href: "mailto:thrivehealthfitness8@gmail.com",
     icon: Mail,
   },
   {
@@ -676,27 +682,28 @@ const tickerItems = (language: keyof typeof translations) => [
 function ThriveMark({ compact = false }: { compact?: boolean }) {
   return (
     <div
-      className={`flex items-center gap-3 ${compact ? "" : ""}`}
+      className={`flex items-center gap-2 md:gap-3 ${compact ? "" : "shrink-1 min-w-0"}`}
       aria-label="Thrive Health & Fitness"
     >
       <img
         src="/logo_trans.png"
         alt="Thrive Health & Fitness"
-        className="object-contain light:bg-foreground light:rounded-md"
+        className="object-contain light:bg-foreground light:rounded-md shrink-0"
         style={{
-          height: compact ? "34px" : "70px",
+          // Scales down to 36px on mobile, grows to 70px on desktop
+          height: compact ? "34px" : "clamp(36px, 10vw, 70px)",
           width: "auto",
           objectFit: "contain",
         }}
       />
-      <div className="flex flex-col justify-center mt-2.5 -ml-1.5">
+      <div className="flex flex-col justify-center mt-1 md:mt-2.5 -ml-1 md:-ml-1.5 shrink-1 min-w-0">
         <span
-          className={`block leading-[0.9] font-black italic tracking-[-0.08em] ${compact ? "text-lg" : "text-2xl"}`}
+          className={`block leading-[0.9] font-black italic tracking-[-0.08em] truncate ${compact ? "text-lg" : "text-[1.15rem] md:text-2xl"}`}
         >
           Thrive
         </span>
         <span
-          className={`block mt-0.5 text-muted-foreground/80 font-bold uppercase tracking-[0.18em] ${compact ? "text-[5px]" : "text-[0.44rem]"}`}
+          className={`block md:mt-0.5 text-muted-foreground/80 font-bold uppercase tracking-[0.18em] truncate ${compact ? "text-[5px]" : "text-[0.38rem] md:text-[0.44rem]"}`}
         >
           Health &amp; Fitness
         </span>
@@ -803,9 +810,13 @@ function StudioGallery({ language }: { language: keyof typeof translations }) {
     </section>
   );
 }
+// We add &output=embed to make the URL work inside an iframe without requiring an API key
+const mapEmbedUrl = 
+  "https://maps.google.com/maps?q=9.010377,38.877495&ll=9.010377,38.877495&z=16&output=embed";
 
 function FindUsSection({ language }: { language: keyof typeof translations }) {
   const studioHours = getStudioHours(language);
+
   return (
     <section
       className="scroll-mt-24 px-[5.2vw] max-md:px-5 py-32 max-md:py-20 text-center bg-[radial-gradient(circle_at_50%_0%,rgba(41,171,226,0.035),transparent_38%)]"
@@ -823,7 +834,9 @@ function FindUsSection({ language }: { language: keyof typeof translations }) {
             : "One studio, open early and late, so training fits your schedule instead of the other way around."}
         </p>
       </Reveal>
+
       <div className="max-w-275 mx-auto mt-16 max-md:mt-10 grid grid-cols-[1.1fr_0.9fr] max-md:grid-cols-1 gap-5 text-left items-stretch">
+        {/* Left Information Card */}
         <Reveal delay={150}>
           <div className="h-full p-8 max-md:p-6 flex flex-col gap-6.5 border border-border rounded-[20px] bg-linear-to-br from-surface-light to-surface">
             <div className="flex flex-col gap-2.5">
@@ -831,9 +844,12 @@ function FindUsSection({ language }: { language: keyof typeof translations }) {
                 <MapPin size={16} /> {language === "am" ? "አድራሻ" : "Address"}
               </span>
               <p className="text-foreground text-sm leading-normal">
-                Bole Road, Addis Ababa, Ethiopia
+                {language === "am"
+                  ? "አያት ኖህ ሪል እስቴት የትራፊክ መብራቱ ጋር ፣ ኣዲስ ኣበባ፣ ኢትዮጵያ"
+                  : "Near the traffic light at Ayat Noah Real Estate, Addis Ababa, Ethiopia"}
               </p>
             </div>
+
             <div className="flex flex-col gap-2.5">
               <span className="flex items-center gap-2 text-primary text-[11px] font-extrabold tracking-[1.4px] uppercase">
                 <Clock3 size={16} />{" "}
@@ -851,6 +867,7 @@ function FindUsSection({ language }: { language: keyof typeof translations }) {
                 ))}
               </ul>
             </div>
+
             <div className="flex flex-col gap-2.5">
               <span className="flex items-center gap-2 text-primary text-[11px] font-extrabold tracking-[1.4px] uppercase">
                 <Phone size={16} />{" "}
@@ -858,11 +875,14 @@ function FindUsSection({ language }: { language: keyof typeof translations }) {
               </span>
               <a
                 className="self-start text-foreground text-lg font-extrabold tracking-[-0.02em] transition-colors hover:text-primary focus-visible:text-primary"
-                href="tel:+251911000000"
+                href="tel:+251970084408"
               >
-                +251 911 000 000
+                +251 97 0084408
               </a>
+              <p>+251 91 2190603</p>
+              <p>+251 91 3814546</p>
             </div>
+
             <a
               className="mt-auto self-start inline-flex items-center gap-3 rounded-full text-white bg-primary text-[0.8rem] font-extrabold py-3.5 pl-5.5 pr-5 shadow-[0_8px_30px_var(--blue-glow)] transition-all hover:-translate-y-1 hover:shadow-[0_13px_36px_var(--blue-glow)]"
               href={directionsUrl}
@@ -874,25 +894,18 @@ function FindUsSection({ language }: { language: keyof typeof translations }) {
             </a>
           </div>
         </Reveal>
+
+        {/* Right Map Card */}
         <Reveal delay={250}>
-          <div
-            className="relative h-full overflow-hidden min-h-64 max-md:min-h-52 flex flex-col items-center justify-center gap-3 border border-primary/30 rounded-[20px] bg-navy"
-            role="img"
-            aria-label="Stylized map marker for the Thrive studio"
-          >
-            <div
-              className="absolute inset-0 bg-size-[34px_34px] bg-[linear-gradient(rgba(41,171,226,0.14)_1px,transparent_1px),linear-gradient(90deg,rgba(41,171,226,0.14)_1px,transparent_1px)] mask-[radial-gradient(circle_at_50%_45%,black_0%,transparent_72%)]"
-              aria-hidden="true"
-            />
-            <div
-              className="relative z-1 grid place-items-center w-14 h-14 rounded-full text-white bg-primary shadow-[0_0_34px_var(--blue-glow)]"
-              aria-hidden="true"
-            >
-              <MapPin size={22} strokeWidth={2.4} />
-            </div>
-            <span className="relative z-1 text-muted-foreground text-xs font-bold tracking-[0.06em] uppercase">
-              {language === "am" ? "ቦሌ መንገድ ስቱዲዮ" : "Bole Road Studio"}
-            </span>
+          <div className="relative h-full w-full overflow-hidden min-h-[300px] max-md:min-h-[250px] border border-border rounded-[20px] bg-surface-light">
+            <iframe
+              src={mapEmbedUrl}
+              className="absolute top-0 left-0 w-full h-full border-0"
+              allowFullScreen={true}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Studio Location Map"
+            ></iframe>
           </div>
         </Reveal>
       </div>
@@ -947,7 +960,7 @@ function GetStartedSection({
   return (
     <section
       className="scroll-mt-24 px-[5.2vw] max-md:px-5 py-32 max-md:py-20 text-center bg-[radial-gradient(circle_at_50%_0%,rgba(41,171,226,0.04),transparent_37%)]"
-      id="get-started"
+      id="contact"
     >
       <SectionHeading
         kicker={language === "am" ? "ለስልጠና ዝግጁ ነዎት?" : "READY TO TRAIN"}
@@ -1033,6 +1046,116 @@ function LinkedinIcon({ size = 18 }: { size?: number }) {
   );
 }
 
+function FacebookIcon({ size = 18 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+    </svg>
+  );
+}
+
+function TiktokIcon({ size = 18 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+    </svg>
+  );
+}
+
+const getPricingPackages = (language: keyof typeof translations) => [
+  {
+    title: language === "am" ? "ለግለሰብ" : "Single",
+    subtitle: language === "am" ? "ሙሉ ጥቅል" : "Full Package",
+    icon: User,
+    featured: false,
+    prices: [
+      { duration: language === "am" ? "1 ወር" : "1 Month", amount: "15,000" },
+      { duration: language === "am" ? "2 ወራት" : "2 Months", amount: "25,000" },
+      { duration: language === "am" ? "3 ወራት" : "3 Months", amount: "38,000" },
+      { duration: language === "am" ? "6 ወራት" : "6 Months", amount: "59,500" },
+      { duration: language === "am" ? "1 ዓመት" : "1 Year", amount: "90,000" },
+    ],
+  },
+  {
+    title: language === "am" ? "ለጥንዶች" : "Couple",
+    subtitle: language === "am" ? "ሙሉ ጥቅል" : "Full Package",
+    icon: Users,
+    featured: true,
+    prices: [
+      { duration: language === "am" ? "1 ወር" : "1 Month", amount: "28,000" },
+      { duration: language === "am" ? "2 ወራት" : "2 Months", amount: "44,000" },
+      { duration: language === "am" ? "3 ወራት" : "3 Months", amount: "68,000" },
+      { duration: language === "am" ? "6 ወራት" : "6 Months", amount: "105,000" },
+      { duration: language === "am" ? "1 ዓመት" : "1 Year", amount: "150,000" },
+    ],
+  },
+  {
+    title: language === "am" ? "የቅናሽ ሰዓት" : "Happy Hour",
+    subtitle: language === "am" ? "ለግለሰብ ብቻ" : "Single Only",
+    time: "10:00 AM – 4:00 PM",
+    icon: Clock3,
+    featured: false,
+    prices: [
+      { duration: language === "am" ? "1 ወር" : "1 Month", amount: "9,000" },
+      { duration: language === "am" ? "2 ወራት" : "2 Months", amount: "17,000" },
+      { duration: language === "am" ? "3 ወራት" : "3 Months", amount: "25,000" },
+      { duration: language === "am" ? "6 ወራት" : "6 Months", amount: "42,000" },
+      { duration: language === "am" ? "1 ዓመት" : "1 Year", amount: "60,000" },
+    ],
+  },
+];
+
+const getMembershipIncludes = (language: keyof typeof translations) => [
+  {
+    label: language === "am" ? "የግል አሰልጣኝ" : "Personal Trainer",
+    icon: Dumbbell,
+  },
+  { label: language === "am" ? "ስቲም እና ሳውና" : "Steam & Sauna", icon: Flame },
+  { label: language === "am" ? "ሞሮካን ባዝ" : "Moroccan Bath", icon: Droplets },
+  {
+    label: language === "am" ? "የበረዶ ውሃ (ለወንዶች)" : "Ice Bath For Men",
+    icon: Snowflake,
+  },
+  { label: language === "am" ? "ነፃ መኪና ማቆሚያ" : "Free Parking", icon: Car },
+  {
+    label: language === "am" ? "24/7 የጂም አገልግሎት" : "24/7 Gym Access",
+    icon: Clock3,
+  },
+];
+
+const getFreezes = (language: keyof typeof translations) => [
+  {
+    duration: language === "am" ? "1 ዓመት" : "1 Year",
+    freeze: language === "am" ? "3 ወራት ማቆሚያ" : "3 Months Freeze",
+  },
+  {
+    duration: language === "am" ? "6 ወራት" : "6 Months",
+    freeze: language === "am" ? "2 ወራት ማቆሚያ" : "2 Months Freeze",
+  },
+  {
+    duration: language === "am" ? "3 ወራት" : "3 Months",
+    freeze: language === "am" ? "1 ወር ማቆሚያ" : "1 Month Freeze",
+  },
+];
+
 export default function ThriveLanding() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [language, setLanguage] = useState<keyof typeof translations>("en");
@@ -1086,10 +1209,11 @@ export default function ThriveLanding() {
         {/* Sticky / Glassmorphic Header */}
         <header className="fixed top-0 inset-x-0 z-50 px-[5.2vw] max-md:px-5 bg-background/80 backdrop-blur-md border-b border-border/40 transition-all duration-300">
           <nav
-            className="w-full max-w-7xl mx-auto min-h-18 flex items-center justify-between gap-7 relative py-3"
+            className="w-full max-w-7xl mx-auto min-h-18 flex items-center justify-between gap-2 md:gap-7 relative py-3"
             aria-label="Primary navigation"
           >
-            <a href="#home" className="block">
+            {/* Logo */}
+            <a href="#home" className="block shrink-1 min-w-0 pr-2">
               <ThriveMark />
             </a>
 
@@ -1111,12 +1235,13 @@ export default function ThriveLanding() {
               ))}
             </div>
 
-            {/* Language & Theme Switches */}
-            <div className="flex items-center gap-2.5 ml-auto">
+            {/* ACTION BUTTONS GROUP: Kept firmly together to prevent wrapping */}
+            <div className="flex items-center justify-end gap-1.5 md:gap-3.5 shrink-0 ml-auto">
+              {/* Language Switch */}
               <button
                 type="button"
                 aria-label={t("language")}
-                className="relative inline-flex items-center w-16 p-1 border border-border rounded-full bg-panel-bg shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] cursor-pointer overflow-hidden"
+                className="relative inline-flex items-center w-[52px] md:w-16 p-1 border border-border rounded-full bg-panel-bg shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] cursor-pointer overflow-hidden shrink-0"
                 onClick={() => setLanguage(language === "en" ? "am" : "en")}
               >
                 <span
@@ -1128,58 +1253,62 @@ export default function ThriveLanding() {
                   aria-hidden="true"
                 />
                 <span
-                  className={`relative z-1 flex-1 py-1 rounded-full text-[0.66rem] font-extrabold tracking-wider uppercase transition-colors duration-200 ${language === "en" ? "text-white" : "text-muted-foreground"}`}
+                  className={`relative z-1 flex-1 py-1 rounded-full text-[0.55rem] md:text-[0.66rem] font-extrabold tracking-wider uppercase transition-colors duration-200 ${language === "en" ? "text-white" : "text-muted-foreground"}`}
                 >
                   {t("enLabel")}
                 </span>
                 <span
-                  className={`relative z-1 flex-1 py-1 rounded-full text-[0.66rem] font-extrabold tracking-wider uppercase transition-colors duration-200 ${language === "en" ? "text-muted-foreground" : "text-white"}`}
+                  className={`relative z-1 flex-1 py-1 rounded-full text-[0.55rem] md:text-[0.66rem] font-extrabold tracking-wider uppercase transition-colors duration-200 ${language === "en" ? "text-muted-foreground" : "text-white"}`}
                 >
                   {t("amLabel")}
                 </span>
               </button>
+
+              {/* Theme Toggle */}
               <button
                 type="button"
-                className="grid place-items-center w-9 h-9 border border-border rounded-full bg-panel-bg text-foreground shadow-[0_18px_38px_rgba(4,12,16,0.34)] cursor-pointer transition-all hover:-translate-y-px hover:border-primary/40"
+                className="grid place-items-center w-7 h-7 md:w-9 md:h-9 border border-border rounded-full bg-panel-bg text-foreground shadow-[0_18px_38px_rgba(4,12,16,0.34)] cursor-pointer transition-all hover:-translate-y-px hover:border-primary/40 shrink-0"
                 onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
                 aria-label={theme === "dark" ? t("lightMode") : t("darkMode")}
                 title={theme === "dark" ? t("lightMode") : t("darkMode")}
               >
                 {theme === "dark" ? (
-                  <SunMedium size={16} />
+                  <SunMedium className="w-3.5 h-3.5 md:w-4 md:h-4" />
                 ) : (
-                  <MoonStar size={16} />
+                  <MoonStar className="w-3.5 h-3.5 md:w-4 md:h-4" />
                 )}
               </button>
-            </div>
 
-            <div className="max-md:hidden flex items-center gap-3.5">
-              <div className="flex flex-col items-end gap-0.5">
-                <span className="text-muted-foreground/80 text-[0.62rem]">
-                  {t("contactUs")}
-                </span>
-                <strong className="text-[0.82rem] tracking-wide">
-                  +251 911 000 000
-                </strong>
+              {/* Contact Block (Text hidden on mobile, Icon visible) */}
+              <div className="flex items-center gap-1.5 md:gap-3.5 shrink-0">
+                <div className="max-md:hidden flex flex-col items-end gap-0.5">
+                  <span className="text-muted-foreground/80 text-[0.62rem]">
+                    {t("contactUs")}
+                  </span>
+                  <strong className="text-[0.82rem] tracking-wide">
+                    +251 97 0084408
+                  </strong>
+                </div>
+                <a
+                  className="grid place-items-center w-7 h-7 md:w-9 md:h-9 rounded-full text-white bg-primary shadow-[0_0_22px_var(--blue-glow)] transition-all hover:-translate-y-0.5 hover:scale-105 hover:shadow-[0_0_32px_var(--blue-glow)] shrink-0"
+                  href="tel:+251970084408"
+                  aria-label="Call Thrive Health & Fitness"
+                >
+                  <Phone className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                </a>
               </div>
-              <a
-                className="grid place-items-center w-9 h-9 rounded-full text-white bg-primary shadow-[0_0_22px_var(--blue-glow)] transition-all hover:-translate-y-0.5 hover:scale-105 hover:shadow-[0_0_32px_var(--blue-glow)]"
-                href="tel:+251911000000"
-                aria-label="Call Thrive Health & Fitness"
-              >
-                <Phone size={16} />
-              </a>
-            </div>
 
-            <button
-              className="hidden max-md:block z-12 border-0 bg-transparent text-foreground cursor-pointer"
-              type="button"
-              aria-label={menuOpen ? t("closeMenu") : t("openMenu")}
-              aria-expanded={menuOpen}
-              onClick={() => setMenuOpen(!menuOpen)}
-            >
-              {menuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+              {/* Mobile Hamburger Menu */}
+              <button
+                className="hidden max-md:flex place-items-center z-12 w-7 h-7 border-0 bg-transparent text-foreground cursor-pointer shrink-0 ml-1"
+                type="button"
+                aria-label={menuOpen ? t("closeMenu") : t("openMenu")}
+                aria-expanded={menuOpen}
+                onClick={() => setMenuOpen(!menuOpen)}
+              >
+                {menuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
           </nav>
         </header>
 
@@ -1530,76 +1659,156 @@ export default function ThriveLanding() {
         </div>
       </section>
 
+      {/* Pricing Section     */}
       <section
         className="scroll-mt-24 px-[5.2vw] max-md:px-5 py-32 max-md:py-20 text-center bg-navy"
         id="pricing"
       >
         <SectionHeading
           kicker={t("investInYourself")}
-          title={t("planFor")}
-          accent={t("nextLevel")}
+          title={language === "am" ? "ፕሪሚየም" : "Premium"}
+          accent={language === "am" ? "የአባልነት ጥቅሎች" : "Membership Packages"}
         />
         <Reveal delay={100}>
           <p className="max-w-135 mx-auto mt-5 text-muted-foreground text-sm max-md:text-[13px] leading-relaxed">
             {t("pricingIntro")}
           </p>
         </Reveal>
+
+        {/* PRICING CARDS */}
         <div className="max-w-275 mx-auto mt-16 max-md:mt-10 grid grid-cols-3 max-md:grid-cols-1 gap-6 items-stretch text-left">
-          {plans.map((plan, i) => (
-            <Reveal key={plan.name} delay={i * 150} className="h-full">
+          {getPricingPackages(language).map((pkg, i) => (
+            <Reveal key={pkg.title} delay={i * 150} className="h-full">
               <article
-                className={`h-full pt-8 px-6 pb-6 relative flex flex-col border rounded-[20px] bg-surface transition-all ${plan.featured ? "border-primary shadow-[0_0_38px_rgba(41,171,226,0.13)] md:-translate-y-3 hover:-translate-y-4" : "border-border hover:border-primary/50 hover:-translate-y-1"}`}
+                className={`h-full pt-8 px-6 pb-6 relative flex flex-col border rounded-[20px] bg-surface transition-all ${
+                  pkg.featured
+                    ? "border-primary shadow-[0_0_38px_rgba(41,171,226,0.13)] md:-translate-y-3 hover:-translate-y-4"
+                    : "border-border hover:border-primary/50 hover:-translate-y-1"
+                }`}
               >
-                {plan.featured && (
+                {pkg.featured && (
                   <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 py-1.5 px-4 rounded-full text-white bg-primary text-[10px] font-black whitespace-nowrap tracking-wider shadow-sm">
                     {language === "am" ? "በጣም ተወዳጅ" : "Most Popular"}
                   </span>
                 )}
-                <span className="text-primary text-[11px] font-extrabold tracking-[1.7px] uppercase">
-                  {plan.name}
-                </span>
-                <div className="flex items-baseline gap-1.5 mt-5">
-                  <strong className="text-[47px] tracking-[-2px] text-foreground font-black">
-                    {plan.price}
-                  </strong>
-                  <span className="text-muted-foreground text-xs">
-                    {language === "am" ? "/ በወር" : "/ month"}
+
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-primary text-[11px] font-extrabold tracking-[1.7px] uppercase">
+                    {pkg.subtitle}
                   </span>
+                  <pkg.icon className="text-primary/70" size={20} />
                 </div>
-                <p className="max-w-56 min-h-12 mt-3 text-muted-foreground text-xs leading-relaxed">
-                  {plan.description}
-                </p>
-                <ul className="grid gap-3.5 my-8 p-0 list-none flex-1">
-                  {plan.items.map((item) => (
-                    <li
-                      key={item}
-                      className="flex gap-2.5 items-start text-foreground/80 text-xs leading-tight"
+
+                <h3 className="mt-1 text-3xl font-black text-foreground uppercase tracking-tight flex flex-col gap-2">
+                  {pkg.title}
+                  {pkg.time && (
+                    <span className="text-[10px] font-bold text-muted-foreground bg-panel-strong px-2.5 py-1 rounded-md w-max tracking-widest uppercase">
+                      {pkg.time}
+                    </span>
+                  )}
+                </h3>
+
+                {/* Duration / Pricing List */}
+                <div className="flex flex-col mt-7 flex-1">
+                  {pkg.prices.map((price, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-center justify-between py-3.5 border-b border-border/60 last:border-0"
                     >
-                      <Check
-                        size={16}
-                        className="text-primary shrink-0 mt-0.5"
-                      />
-                      {item}
-                    </li>
+                      <span className="text-xs font-bold text-foreground/80 uppercase tracking-wide">
+                        {price.duration}
+                      </span>
+                      <div className="flex items-baseline gap-1.5">
+                        <span className="text-lg font-black text-foreground tracking-tight">
+                          {price.amount}
+                        </span>
+                        <span className="text-[9px] font-extrabold text-primary uppercase">
+                          {language === "am" ? "ብር" : "ETB"}
+                        </span>
+                      </div>
+                    </div>
                   ))}
-                </ul>
+                </div>
+
                 <a
                   href="#contact"
                   className={
-                    plan.featured
-                      ? "mt-auto justify-center inline-flex items-center gap-3 rounded-full text-white bg-primary text-[0.8rem] font-extrabold py-3.5 px-5 shadow-[0_8px_30px_var(--blue-glow)] transition-all hover:opacity-90"
-                      : "mt-auto justify-center inline-flex items-center gap-3.5 rounded-full text-foreground text-xs font-bold py-3.5 px-5 border border-border transition-colors hover:bg-surface-light hover:border-primary/50 hover:text-primary"
+                    pkg.featured
+                      ? "mt-8 justify-center inline-flex items-center gap-3 rounded-full text-white bg-primary text-[0.8rem] font-extrabold py-3.5 px-5 shadow-[0_8px_30px_var(--blue-glow)] transition-all hover:opacity-90"
+                      : "mt-8 justify-center inline-flex items-center gap-3.5 rounded-full text-foreground text-xs font-bold py-3.5 px-5 border border-border transition-colors hover:bg-surface-light hover:border-primary/50 hover:text-primary"
                   }
                 >
-                  {language === "am"
-                    ? `${plan.name} ይምረጡ`
-                    : `Choose ${plan.name}`}{" "}
+                  {language === "am" ? "አሁን ይመዝገቡ" : "Get Started"}{" "}
                   <ArrowUpRight size={16} />
                 </a>
               </article>
             </Reveal>
           ))}
         </div>
+
+        {/* YOUR MEMBERSHIP INCLUDES (ICONS) */}
+        <Reveal delay={200}>
+          <div className="mt-10 max-w-275 mx-auto border border-border rounded-[24px] bg-surface-light overflow-hidden">
+            <div className="bg-primary/10 py-3 border-b border-border/50 text-center">
+              <h4 className="text-primary text-[10px] font-extrabold tracking-[2px] uppercase">
+                {language === "am"
+                  ? "አባልነትዎ እነዚህን ያካትታል"
+                  : "Your Membership Includes"}
+              </h4>
+            </div>
+            <div className="grid grid-cols-3 md:grid-cols-6 gap-4 p-6 md:p-8">
+              {getMembershipIncludes(language).map((item, i) => (
+                <div
+                  key={i}
+                  className="flex flex-col items-center text-center gap-3 group"
+                >
+                  <div className="w-12 h-12 rounded-[14px] bg-surface border border-border flex items-center justify-center text-primary shadow-sm transition-transform group-hover:scale-110">
+                    <item.icon size={22} />
+                  </div>
+                  <span className="text-[11px] font-bold text-muted-foreground uppercase tracking-wide max-w-[90px] leading-snug">
+                    {item.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Reveal>
+
+        {/* MEMBERSHIP FREEZE SECTION */}
+        <Reveal delay={300}>
+          <div className="mt-6 max-w-275 mx-auto grid grid-cols-1 md:grid-cols-[1.5fr_1fr_1fr_1fr] gap-4">
+            <div className="border border-border rounded-[20px] bg-surface p-6 flex flex-col justify-center text-left">
+              <div className="flex items-center gap-2.5 text-primary mb-2">
+                <Snowflake size={22} />
+                <h4 className="font-black tracking-tight text-lg uppercase text-foreground">
+                  {language === "am" ? "የአባልነት ማገጃ" : "Membership Freeze"}
+                </h4>
+              </div>
+              <p className="text-[13px] text-muted-foreground leading-relaxed">
+                {language === "am"
+                  ? "ህይወት ሲያጋጥም አባልነትዎን ለጊዜው ማቆም ይችላሉ።"
+                  : "We've got you covered. Pause when life happens."}
+              </p>
+            </div>
+
+            {getFreezes(language).map((freeze, i) => (
+              <div
+                key={i}
+                className="border border-border rounded-[20px] bg-surface-light p-5 flex flex-col items-center justify-center text-center gap-2 transition-colors hover:border-primary/40"
+              >
+                <div className="flex items-center gap-2 text-primary">
+                  <Calendar size={18} />
+                  <span className="text-sm font-black text-foreground uppercase tracking-wide">
+                    {freeze.duration}
+                  </span>
+                </div>
+                <span className="text-[11px] font-extrabold text-muted-foreground tracking-[1px] uppercase">
+                  {freeze.freeze}
+                </span>
+              </div>
+            ))}
+          </div>
+        </Reveal>
       </section>
 
       <StudioGallery language={language} />
@@ -1644,7 +1853,7 @@ export default function ThriveLanding() {
       {/* CTA Section */}
       <section
         className="scroll-mt-24 min-h-125 max-md:min-h-96 px-[5.2vw] max-md:px-5 py-24 relative overflow-hidden bg-background max-md:z-3 flex flex-col items-center justify-center text-center"
-        id="contact"
+        id="cta"
       >
         <div className="absolute w-150 h-100 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(circle,rgba(41,171,226,0.15),transparent_70%)] pointer-events-none" />
         <Reveal>
@@ -1663,7 +1872,7 @@ export default function ThriveLanding() {
             </em>
           </h2>
           <a
-            href="mailto:hello@thrivefit.co"
+            href="mailto:thrivehealthfitness8@gmail.com"
             className="relative inline-flex items-center gap-3 mt-10 rounded-full text-white bg-primary shadow-lg text-sm font-bold py-4 px-8 transition-transform hover:-translate-y-1 hover:shadow-[0_10px_40px_var(--blue-glow)]"
           >
             {t("startConversation")} <ArrowRight size={18} />
@@ -1699,7 +1908,6 @@ export default function ThriveLanding() {
 
         <div className="relative z-10 max-w-6xl mx-auto px-[5.2vw] max-md:px-5">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-12 max-md:gap-10 pb-12 border-b border-border">
-            
             {/* Brand Column */}
             <div className="flex flex-col gap-5 md:col-span-5">
               <ThriveMark compact />
@@ -1710,18 +1918,31 @@ export default function ThriveLanding() {
               </p>
               <div className="flex gap-3 mt-3">
                 <a
-                  href="#home"
-                  aria-label={t("socialInstagram")}
+                  href="https://web.facebook.com/profile.php?id=61592291243042&_rdc=1&_rdr#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Facebook"
+                  className="grid place-items-center w-10 h-10 rounded-full bg-surface border border-border text-muted-foreground transition-all hover:bg-primary hover:text-white hover:border-primary hover:-translate-y-1"
+                >
+                  <FacebookIcon size={18} />
+                </a>
+                <a
+                  href="https://www.instagram.com/thrive_healthfitness?igsh=MTl5dHFyN2l1ZGt5ag=="
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram"
                   className="grid place-items-center w-10 h-10 rounded-full bg-surface border border-border text-muted-foreground transition-all hover:bg-primary hover:text-white hover:border-primary hover:-translate-y-1"
                 >
                   <InstagramIcon size={18} />
                 </a>
                 <a
-                  href="#home"
-                  aria-label={t("socialLinkedIn")}
+                  href="https://vm.tiktok.com/ZS9kLQ2vEpRvx-EyMY4/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="TikTok"
                   className="grid place-items-center w-10 h-10 rounded-full bg-surface border border-border text-muted-foreground transition-all hover:bg-primary hover:text-white hover:border-primary hover:-translate-y-1"
                 >
-                  <LinkedinIcon size={18} />
+                  <TiktokIcon size={18} />
                 </a>
               </div>
             </div>
@@ -1774,65 +1995,79 @@ export default function ThriveLanding() {
                 <div className="flex items-center gap-3 text-muted-foreground text-sm">
                   <Phone size={18} className="text-primary shrink-0" />
                   <a
-                    href="tel:+251911000000"
+                    href="tel:+251970084408"
                     className="hover:text-primary transition-colors"
                   >
-                    +251 911 000 000
+                    +251 97 0084408
+                  </a>
+                  <a
+                    href="tel:+251970084408"
+                    className="hover:text-primary transition-colors"
+                  >
+                    +251 91 2190603
+                  </a>
+                  <a
+                    href="tel:+251970084408"
+                    className="hover:text-primary transition-colors"
+                  >
+                    +251 91 3814546
                   </a>
                 </div>
                 <div className="flex items-center gap-3 text-muted-foreground text-sm">
                   <Mail size={18} className="text-primary shrink-0" />
                   <a
-                    href="mailto:hello@thrivefit.co"
+                    href="mailto:thrivehealthfitness8@gmail.com"
                     className="hover:text-primary transition-colors"
                   >
-                    hello@thrivefit.co
+                    thrivehealthfitness8@gmail.com
                   </a>
                 </div>
               </div>
             </div>
           </div>
           <div className="pt-2 flex items-center justify-center">
-              <p className="text-[0.7rem] max-md:text-[0.68rem] text-muted-foreground font-medium flex items-center gap-1.5 uppercase tracking-widest flex-wrap justify-center">
-                Powered by
-                <a
-                  href="https://magikawi.io"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 font-black transition-all duration-300 hover:-translate-y-0.5 group ml-0.5"
-                >
-                  <span className="bg-linear-to-r from-primary via-blue-400 to-primary bg-clip-text text-transparent bg-[length:200%_auto] animate-[pulse_3s_ease-in-out_infinite] group-hover:animate-none tracking-wide text-[0.85rem] max-md:text-[0.8rem]">
-                    Magiካዊ.io
-                  </span>
-                  <Sparkles
-                    size={14}
-                    className="text-primary opacity-80 md:opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:rotate-12"
-                  />
-                </a>
-              </p>
-            </div>
-
+            <p className="text-[0.7rem] max-md:text-[0.68rem] text-muted-foreground font-medium flex items-center gap-1.5 uppercase tracking-widest flex-wrap justify-center">
+              Powered by
+              <a
+                href="https://magikawi.io"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 font-black transition-all duration-300 hover:-translate-y-0.5 group ml-0.5"
+              >
+                <span className="bg-linear-to-r from-primary via-blue-400 to-primary bg-clip-text text-transparent bg-[length:200%_auto] animate-[pulse_3s_ease-in-out_infinite] group-hover:animate-none tracking-wide text-[0.85rem] max-md:text-[0.8rem]">
+                  Magiካዊ.io
+                </span>
+                <Sparkles
+                  size={14}
+                  className="text-primary opacity-80 md:opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:rotate-12"
+                />
+              </a>
+            </p>
+          </div>
 
           {/* Bottom Legal & Powered By Container */}
           <div className="pt-8 flex flex-col items-center gap-6 text-center">
             <div className="w-full flex max-md:flex-col items-center justify-between gap-4">
               <p className="text-muted-foreground text-[0.75rem] font-medium">
-                © {new Date().getFullYear()} Thrive Health & Fitness. All rights reserved.
+                © {new Date().getFullYear()} Thrive Health & Fitness. All rights
+                reserved.
               </p>
               <div className="flex items-center justify-center gap-6 text-[0.75rem] font-medium text-muted-foreground">
-                <a href="#home" className="hover:text-primary transition-colors">
+                <a
+                  href="#home"
+                  className="hover:text-primary transition-colors"
+                >
                   Privacy Policy
                 </a>
-                <a href="#home" className="hover:text-primary transition-colors">
+                <a
+                  href="#home"
+                  className="hover:text-primary transition-colors"
+                >
                   Terms of Service
                 </a>
               </div>
             </div>
-
-            {/* Powered By Badge - Fully Visible on Mobile */}
-            
           </div>
-
         </div>
       </footer>
     </main>
